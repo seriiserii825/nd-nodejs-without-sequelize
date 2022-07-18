@@ -5,7 +5,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = process.env.PORT || 8087;
-const appRoutes = require("./routes");
+const userRoutes = require("./routes/user.route");
 const sequelize = require("./db-conection");
 const JWT = require("jsonwebtoken");
 
@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/", appRoutes);
+app.use("/", userRoutes);
 
 app.listen(PORT, function () {
   sequelize
