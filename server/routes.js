@@ -63,4 +63,24 @@ router.put('/update-user', (req, res) => {
 		});
 });
 
+router.delete("/user/:id", (req, res) => {
+  User.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then(() => {
+      return res.status(200).json({
+        status: 1,
+        message: 'User deleted successfully',
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        status: 0,
+        message: 'Error while deleting user:' + err,
+      });
+    });
+});
+
 module.exports = router;
