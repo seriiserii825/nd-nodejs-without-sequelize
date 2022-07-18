@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/user.model');
+const JWT_CONFIG = require('../../config/jwt-token');
 
 router.get('/', (req, res) => {
 	return res.json({
@@ -51,6 +52,7 @@ router.post('/user', (req, res) => {
 		});
 });
 
+//login
 router.post('/login', (req, res) => {
 	User.findOne({
 		where: {
@@ -70,10 +72,10 @@ router.post('/login', (req, res) => {
 						id: user.id,
 						email: user.email,
 					},
-					'secret',
+					JWT_CONFIG.secret,
 					{
-						expiresIn: '1h',
-						notBefore: '1s',
+						expiresIn: JWT_CONFIG.expiresIn,
+						notBefore: JWT_CONFIG.notBefore,
 					}
 				);
 				return res.status(200).json({
@@ -95,6 +97,30 @@ router.post('/login', (req, res) => {
 				error: err,
 			});
 		});
+});
+
+router.post('/validate', (req, res) => {
+  let token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({
+      status: 0,
+      message: 'No token provided',
+    });
+  }
+  JWT.verify(token, JWT_CONFIG.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({
+        status: 0,
+        message: 'Invalid token',
+        err
+      });
+    }
+    return res.status(200).json({
+      status: 1,
+      message: 'Token is valid',
+      decoded,
+    });
+  });
 });
 
 router.put('/update-user', (req, res) => {
