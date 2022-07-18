@@ -1,5 +1,4 @@
 require("dotenv").config();
-const Sequelize = require("sequelize");
 const colors = require("colors");
 const bodyParser = require("body-parser");
 const express = require("express");
