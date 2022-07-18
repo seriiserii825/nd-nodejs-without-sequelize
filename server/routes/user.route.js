@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/user.model');
 
@@ -64,10 +65,22 @@ router.post('/login', (req, res) => {
 				});
 			}
 			if (bcrypt.compareSync(req.body.password, user.password)) {
+				let token = JWT.sign(
+					{
+						id: user.id,
+						email: user.email,
+					},
+					'secret',
+					{
+						expiresIn: '1h',
+						notBefore: '1s',
+					}
+				);
 				return res.status(200).json({
 					status: 1,
 					message: 'User logged in successfully',
-					user: user,
+					user,
+					token,
 				});
 			}
 			return res.status(401).json({

@@ -7,7 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 8087;
 const userRoutes = require("./routes/user.route");
 const sequelize = require("./db-conection");
-const JWT = require("jsonwebtoken");
 
 
 sequelize.sync();
