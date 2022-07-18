@@ -1,5 +1,5 @@
 module.exports = {
 	secret: 'secret',
-	expiresIn: 5,
+	expiresIn: "1h",
 	notBefore: 1,
 };
